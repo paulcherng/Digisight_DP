@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="DataIn">
+        <param name="gui:x" value="-241"/>
+        <param name="gui:y" value="-35"/>
+    </component>
+    <component name="Filter">
+        <param name="gui:x" value="-19"/>
+        <param name="gui:y" value="-35"/>
+    </component>
+    <component name="Heartbeat">
+        <param name="gui:x" value="-133"/>
+        <param name="gui:y" value="-35"/>
+    </component>
+    <component name="Map">
+        <param name="gui:x" value="81"/>
+        <param name="gui:y" value="4"/>
+    </component>
+    <component name="Alive">
+        <param name="gui:x" value="147"/>
+        <param name="gui:y" value="-94"/>
+    </component>
+    <component name="Dead">
+        <param name="gui:x" value="185"/>
+        <param name="gui:y" value="38"/>
+    </component>
+</application-layout>

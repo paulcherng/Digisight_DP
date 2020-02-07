@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.3_a45545bc0fa864b6dd457e084eb653f6e2004e05">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.iisigroup.product.iip.capabilitylist.RuleTrigger"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <implements module-reference="com.iisigroup.product.iip.customize.SchemaControl"/>
+        <import from="com.iisigroup.product.iip.customize.SchemaControl"/>
+        <dynamic-variables/>
+        <stream name="DataIn">
+            <schema/>
+        </stream>
+        <box action-schema="processedData" name="DecisionTable2" type="decision-table">
+            <input port="1" stream="DataIn"/>
+            <output port="1" stream="out:DecisionTable2_1"/>
+            <param name="load-from-ams" value="false"/>
+            <param name="use-ads" value="false"/>
+            <param name="ams-server-secure-channel" value="false"/>
+            <param name="emit-non-matching-tuples" value="false"/>
+        </box>
+        <box name="Filter" type="filter">
+            <input port="1" stream="out:DecisionTable2_1"/>
+            <output port="1" stream="ActionOut"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="true"/>
+        </box>
+        <output-stream name="ActionOut"/>
+    </add>
+</modify>

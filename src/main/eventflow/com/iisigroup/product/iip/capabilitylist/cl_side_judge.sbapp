@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.3_a45545bc0fa864b6dd457e084eb653f6e2004e05">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.iisigroup.product.iip.capabilitylist.cl_side_judge"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <parameter-definitions>
+            <parameter default="GW_Loading" name="SrcID"/>
+            <parameter default="*" name="SnsrType"/>
+            <parameter default="cl_side" name="CapType"/>
+            <parameter default="192.168.61.19:9092" name="Broker"/>
+        </parameter-definitions>
+        <dynamic-variables>
+            <dynamic-variable initial-expression="15.09" name="CL" setter-expression="input.CL" setter-stream="Setting"/>
+            <dynamic-variable initial-expression="0" name="ClCount" setter-expression="input.ClCount" setter-stream="ClCounter"/>
+            <dynamic-variable initial-expression="0.0" name="LCL" setter-expression="input.LCL" setter-stream="Setting"/>
+            <dynamic-variable initial-expression="9" name="PointLimit" setter-expression="input.Rule4" setter-stream="Setting"/>
+            <dynamic-variable initial-expression="0" name="Rule1" setter-expression="input.Rule1" setter-stream="Setting"/>
+            <dynamic-variable initial-expression="&quot;&quot;" name="Rule2" setter-expression="input.Rule2" setter-stream="Setting"/>
+            <dynamic-variable initial-expression="&quot;&quot;" name="Rule3" setter-expression="input.Rule3" setter-stream="Setting"/>
+            <dynamic-variable initial-expression="0" name="Rule5" setter-expression="input.Rule5" setter-stream="Setting"/>
+            <dynamic-variable initial-expression="0" name="Rule6" setter-expression="input.Rule6" setter-stream="Setting"/>
+            <dynamic-variable initial-expression="0" name="Rule7" setter-expression="input.Rule7" setter-stream="Setting"/>
+            <dynamic-variable initial-expression="0" name="Rule8" setter-expression="input.Rule8" setter-stream="Setting"/>
+            <dynamic-variable initial-expression="0.0" name="UCL" setter-expression="input.UCL" setter-stream="Setting"/>
+        </dynamic-variables>
+        <data name="JDBCTable" type="jdbctable">
+            <param name="connection" value="IIP"/>
+        </data>
+        <data name="ModuleTable" shared="true" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <table-schema>
+                <schema>
+                    <field name="UUID" type="string"/>
+                    <field name="SrcID" type="string"/>
+                    <field name="SnsrType" type="string"/>
+                    <field name="SnsrID" type="string"/>
+                    <field name="CapType" type="string"/>
+                    <field name="Rule" type="string"/>
+                    <field name="MsgType" type="string"/>
+                    <field name="FEXGroupID" type="string"/>
+                    <field name="Interval" type="int"/>
+                    <field name="Describe" type="string"/>
+                    <field name="Enable" type="string"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="SrcID"/>
+                    <field name="SnsrType"/>
+                    <field name="SnsrID"/>
+                    <field name="Rule"/>
+                </primary-index>
+            </table-schema>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <stream name="DataIn">
+            <schema>
+                <field name="UUID" type="string"/>
+                <field name="SrcID" type="string"/>
+                <field name="SnsrType" type="string"/>
+                <field name="SnsrID" type="string"/>
+                <field name="data" type="double"/>
+                <field name="Time" type="timestamp"/>
+                <field name="Others" type="capture" type-name="Others"/>
+            </schema>
+        </stream>
+        <stream name="ReloadComIn">
+            <schema>
+                <field name="ReloadComIn" type="capture" type-name="ReloadCom"/>
+            </schema>
+        </stream>
+        <box name="FirstStart" type="inputadapter">
+            <output port="1" stream="out:FirstStart_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.once.Once"/>
+            <param name="OutputField" value="time"/>
+        </box>
+        <box name="InputAdapter" type="inputadapter">
+            <output port="1" stream="out:InputAdapter_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.once.Once"/>
+        </box>
+        <box name="Split2" type="split">
+            <input port="1" stream="DataIn"/>
+            <output port="1" stream="out:Split2_1"/>
+            <output port="2" stream="out:Split2_2"/>
+            <param name="output-count" value="2"/>
+        </box>
+        <box name="Split3" type="split">
+            <input port="1" stream="ReloadComIn"/>
+            <output port="1" stream="out:Split3_1"/>
+            <output port="2" stream="out:Split3_2"/>
+            <param name="output-count" value="2"/>
+        </box>
+        <box name="Map4" type="map">
+            <input port="1" stream="out:Split2_2"/>
+            <output port="1" stream="out:Map4_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="counter">if(data&gt;CL) then 1&#13;
+else if(data&lt;CL) then -1&#13;
+else 0</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Map7" type="map">
+            <input port="1" stream="out:Split2_1"/>
+            <output port="1" stream="DataStreamOut"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <declare field="UCL">UCL</declare>
+                    <declare field="LCL">LCL</declare>
+                    <declare field="CL">CL</declare>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Union" type="union">
+            <input port="1" stream="out:InputAdapter_1"/>
+            <input port="2" stream="out:Split3_1"/>
+            <output port="1" stream="out:Union_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <box name="Union2" type="union">
+            <input port="1" stream="out:FirstStart_1"/>
+            <input port="2" stream="out:Split3_2"/>
+            <output port="1" stream="out:Union2_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <output-stream name="DataStreamOut"/>
+        <module-reference name="abnormalCheck">
+            <input name="CapabilityIn" port="1" stream="out:Union2_1"/>
+            <output name="RuleOut" port="1" stream="OutputStream"/>
+            <output name="OutputStream" port="2" stream="out:abnormalCheck_2"/>
+            <param name="file" value="com.iisigroup.iip.utility.AbnormalCheck"/>
+            <input-dataref name="QueryTable" table="ModuleTable"/>
+            <table-export name="QueryTable"/>
+            <parameter-bindings>
+                <binding name="SrcID" value="${SrcID}"/>
+                <binding name="SnsrType" value="${SnsrType}"/>
+                <binding name="CapType" value="${CapType}"/>
+            </parameter-bindings>
+        </module-reference>
+        <box name="Map" type="map">
+            <input port="1" stream="out:Map4_1"/>
+            <output port="1" stream="out:Map_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="ClCount">if(ClCount&gt;0 and counter&lt;0) then -1&#13;
+else if (ClCount&lt;0 and counter&gt;0) then 1&#13;
+else if(counter=0) then 0 &#13;
+else ClCount+counter</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Query" type="query">
+            <input port="1" stream="out:Union_1"/>
+            <output port="1" stream="Setting"/>
+            <dataref id="jdbctable" name="JDBCTable"/>
+            <param name="sql" value="select top 1 Time,CL,UCL,LCL,Rule1,Rule2,Rule3,Rule4,Rule5,Rule6,Rule7,Rule8 from SOA_SPC_CONFIG where SrcID='${SrcID}' order by Time desc"/>
+            <param name="use-callable-statements" value="false"/>
+            <param name="send-null-tuple" value="false"/>
+            <param name="jdbc-output-column" value="0"/>
+            <target-list>
+                <item name="table" selection="all">
+                    <remove field="Time"/>
+                </item>
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="result-set" value="query"/>
+        </box>
+        <output-stream name="OutputStream" scope="public"/>
+        <output-stream name="Setting"/>
+        <box name="Split" type="split">
+            <input port="1" stream="out:Map_1"/>
+            <output port="1" stream="ClCounter"/>
+            <output port="2" stream="out:Split_2"/>
+            <param name="output-count" value="2"/>
+        </box>
+        <output-stream name="ClCounter"/>
+        <box name="Map2" type="map">
+            <input port="1" stream="out:Split_2"/>
+            <output port="1" stream="out:Map2_1"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <remove field="ClCount"/>
+                </item>
+            </target-list>
+        </box>
+        <box name="Filter" type="filter">
+            <input port="1" stream="out:Map2_1"/>
+            <output port="1" stream="out:Filter_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="ClCount&gt;=PointLimit or ClCount&lt;=(PointLimit-2*PointLimit)"/>
+        </box>
+        <box name="Map3" type="map">
+            <input port="1" stream="out:Filter_1"/>
+            <output port="1" stream="out:Map3_1"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <remove field="counter"/>
+                    <remove field="UUID"/>
+                </item>
+            </target-list>
+        </box>
+        <box name="ruleCheck" type="query">
+            <input port="1" stream="out:Map3_1"/>
+            <output port="1" stream="out:ruleCheck_1"/>
+            <dataref id="querytable" name="abnormalCheck.QueryTable"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="expression"/>
+            <param name="limit" value="1"/>
+            <param name="where-expression" value="current.SrcID=input1.SrcID &#13;&#10;and (current.SnsrType=input1.SnsrType or current.SnsrType=&quot;*&quot;)&#13;&#10;and (current.SnsrID=input1.SnsrID or current.SnsrID='*')"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-nothing"/>
+            <param name="order-by-direction" value="descending"/>
+            <param name="order-by-key-field.0" value="SnsrID"/>
+            <param name="order-by-key-field.1" value="Rule"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="all">
+                    <remove field="SrcID"/>
+                    <remove field="SnsrType"/>
+                    <remove field="SnsrID"/>
+                </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="Filter2" type="filter">
+            <input port="1" stream="out:ruleCheck_1"/>
+            <output port="1" stream="out:Filter2_1"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="eval(Rule,input1,bool())"/>
+        </box>
+        <box name="Map6" type="map">
+            <input port="1" stream="out:Filter2_1"/>
+            <output port="1" stream="out:Map6_1"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <replace field="Describe">"連續"+PointLimit+"筆資料在同側"</replace>
+                </item>
+            </target-list>
+        </box>
+        <module-reference name="abnormalCountRef1">
+            <input name="dataIn" port="1" stream="out:Map6_1"/>
+            <output name="OutputStream" port="1" stream="out:abnormalCountRef1_1"/>
+            <param name="file" value="com.iisigroup.product.iip.capabilitylist.AbnormalCount"/>
+            <parameter-bindings>
+                <binding name="countThreshold" value="1"/>
+                <binding name="Broker" value="${Broker}"/>
+            </parameter-bindings>
+        </module-reference>
+    </add>
+</modify>

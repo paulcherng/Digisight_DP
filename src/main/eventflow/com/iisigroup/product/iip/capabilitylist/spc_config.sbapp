@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.3_a45545bc0fa864b6dd457e084eb653f6e2004e05">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.iisigroup.product.iip.capabilitylist.spc_config"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <parameter-definitions>
+            <parameter default="SrcID" name="SrcID"/>
+        </parameter-definitions>
+        <dynamic-variables>
+            <dynamic-variable initial-expression="0.0" name="CL" setter-expression="input.CL" setter-stream="Setting"/>
+            <dynamic-variable initial-expression="0.0" name="LCL" setter-expression="input.LCL" setter-stream="Setting"/>
+            <dynamic-variable initial-expression="0" name="Rule1" setter-expression="input.Rule1" setter-stream="Setting"/>
+            <dynamic-variable initial-expression="&quot;&quot;" name="Rule2" setter-expression="input.Rule2" setter-stream="Setting"/>
+            <dynamic-variable initial-expression="&quot;&quot;" name="Rule3" setter-expression="input.Rule3" setter-stream="Setting"/>
+            <dynamic-variable initial-expression="0" name="Rule4" setter-expression="input.Rule4" setter-stream="Setting"/>
+            <dynamic-variable initial-expression="0" name="Rule5" setter-expression="input.Rule5" setter-stream="Setting"/>
+            <dynamic-variable initial-expression="0" name="Rule6" setter-expression="input.Rule6" setter-stream="Setting"/>
+            <dynamic-variable initial-expression="0" name="Rule7" setter-expression="input.Rule7" setter-stream="Setting"/>
+            <dynamic-variable initial-expression="0" name="Rule8" setter-expression="input.Rule8" setter-stream="Setting"/>
+            <dynamic-variable initial-expression="0.0" name="UCL" setter-expression="input.UCL" setter-stream="Setting"/>
+        </dynamic-variables>
+        <data name="JDBCTable" type="jdbctable">
+            <param name="connection" value="IIP"/>
+        </data>
+        <stream name="InputStream">
+            <schema>
+                <field name="CL" type="double"/>
+                <field name="UCL" type="double"/>
+                <field name="LCL" type="double"/>
+                <field name="Rule1" type="int"/>
+                <field name="Rule4" type="int"/>
+                <field name="Rule5" type="int"/>
+                <field name="Rule6" type="int"/>
+            </schema>
+        </stream>
+        <box name="InputAdapter" type="inputadapter">
+            <output port="1" stream="out:InputAdapter_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.once.Once"/>
+            <param name="OutputField" value="time"/>
+        </box>
+        <box name="Java" type="java">
+            <input port="1" stream="InputStream"/>
+            <output port="1" stream="out:Java_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.webserver.streams.WebInput"/>
+            <param name="contextPath" value="${SrcID}_SPC_Config"/>
+            <param name="linkedWebOutputPath" value=""/>
+            <param name="outputRequestMetadata" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+        </box>
+        <box name="Map5Copy" type="map">
+            <input port="1" stream="out:Java_1"/>
+            <output port="1" stream="out:Map5Copy_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="Time">format_time(now(),"yyyy-MM-dd HH:mm:ss.SSS")</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Query2" type="query">
+            <input port="1" stream="out:Map5Copy_1"/>
+            <output port="1" stream="out:Query2_1"/>
+            <dataref id="jdbctable" name="JDBCTable"/>
+            <param name="sql" value="insert into SOA_SPC_CONFIG(SrcID,Time,CL,UCL,LCL,Rule1,Rule2,Rule3,Rule4,Rule5,Rule6,Rule7,Rule8) &#13;&#10;values('${SrcID}',{Time},{input.CL},{input.UCL},{input.LCL},{input.Rule1},{Rule2},{Rule3},{input.Rule4},{input.Rule5},{input.Rule6},{Rule7},{Rule8})"/>
+            <param name="use-callable-statements" value="false"/>
+            <param name="send-null-tuple" value="false"/>
+            <param name="jdbc-output-column" value="0"/>
+            <target-list>
+                <item name="table" selection="none"/>
+                <item name="input" selection="all"/>
+            </target-list>
+            <param name="result-set" value="query"/>
+        </box>
+        <box name="Union" type="union">
+            <input port="1" stream="out:InputAdapter_1"/>
+            <input port="2" stream="out:Query2_1"/>
+            <output port="1" stream="out:Union_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <box name="Query" type="query">
+            <input port="1" stream="out:Union_1"/>
+            <output port="1" stream="Setting"/>
+            <dataref id="jdbctable" name="JDBCTable"/>
+            <param name="sql" value="select top 1 Time,CL,UCL,LCL,Rule1,Rule2,Rule3,Rule4,Rule5,Rule6,Rule7,Rule8 from SOA_SPC_CONFIG where SrcID='${SrcID}' order by Time desc"/>
+            <param name="use-callable-statements" value="false"/>
+            <param name="send-null-tuple" value="false"/>
+            <param name="jdbc-output-column" value="0"/>
+            <target-list>
+                <item name="table" selection="all">
+                    <remove field="Time"/>
+                </item>
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="result-set" value="query"/>
+        </box>
+        <output-stream name="Setting"/>
+    </add>
+</modify>

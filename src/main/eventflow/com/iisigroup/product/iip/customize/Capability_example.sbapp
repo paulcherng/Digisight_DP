@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.3_a45545bc0fa864b6dd457e084eb653f6e2004e05">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.iisigroup.product.iip.customize.Capability_example"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <implements module-reference="com.iisigroup.product.iip.customize.SchemaControl"/>
+        <import from="com.iisigroup.product.iip.customize.SchemaControl"/>
+        <parameter-definitions>
+            <parameter default="SrcID" name="SrcID"/>
+            <parameter default="SnsrType" name="SnsrType"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <stream name="configIn">
+            <schema>
+                <field name="unhandledConfig" type="capture" type-name="unhandledConfigType"/>
+            </schema>
+        </stream>
+        <stream name="ValidatedDataIn" schema="validatedData"/>
+        <box name="Map" type="map">
+            <input port="1" stream="ValidatedDataIn"/>
+            <output port="1" stream="ProcessedDataOut"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="UUID"/>
+                </item>
+                <expressions>
+                    <include field="SrcID">SrcID</include>
+                    <include field="SnsrType">SnsrType</include>
+                    <include field="SnsrID">SnsrID</include>
+                </expressions>
+            </target-list>
+        </box>
+        <output-stream name="ProcessedDataOut" schema="processedData"/>
+    </add>
+</modify>

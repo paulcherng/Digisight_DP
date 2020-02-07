@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="DataIn">
+        <param name="gui:x" value="-534"/>
+        <param name="gui:y" value="42"/>
+    </component>
+    <component name="ReloadComIn">
+        <param name="gui:x" value="35"/>
+        <param name="gui:y" value="86"/>
+    </component>
+    <component name="abnormalCheck">
+        <param name="gui:x" value="465"/>
+        <param name="gui:y" value="197"/>
+    </component>
+    <component name="abnormalCountRef1">
+        <param name="gui:x" value="892"/>
+        <param name="gui:y" value="63"/>
+    </component>
+    <component name="JDBCTable">
+        <param name="gui:x" value="1037"/>
+        <param name="gui:y" value="53"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="ModuleTable">
+        <param name="gui:x" value="455"/>
+        <param name="gui:y" value="330"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="Aggregate">
+        <param name="gui:x" value="-333"/>
+        <param name="gui:y" value="91"/>
+        <param name="gui:bends:1" value="-382,82;-374,121"/>
+    </component>
+    <component name="Filter">
+        <param name="gui:x" value="35"/>
+        <param name="gui:y" value="184"/>
+    </component>
+    <component name="Filter2">
+        <param name="gui:x" value="669"/>
+        <param name="gui:y" value="63"/>
+    </component>
+    <component name="FirstStart">
+        <param name="gui:x" value="258"/>
+        <param name="gui:y" value="170"/>
+    </component>
+    <component name="InputAdapter">
+        <param name="gui:x" value="132"/>
+        <param name="gui:y" value="-107"/>
+    </component>
+    <component name="Map">
+        <param name="gui:x" value="-246"/>
+        <param name="gui:y" value="91"/>
+    </component>
+    <component name="Map2">
+        <param name="gui:x" value="-53"/>
+        <param name="gui:y" value="184"/>
+        <param name="gui:bends:1" value="-99,121;-88,214"/>
+    </component>
+    <component name="Map3">
+        <param name="gui:x" value="132"/>
+        <param name="gui:y" value="184"/>
+    </component>
+    <component name="Map4">
+        <param name="gui:x" value="-53"/>
+        <param name="gui:y" value="-12"/>
+        <param name="gui:bends:1" value="-96,111;-75,18"/>
+    </component>
+    <component name="Map5">
+        <param name="gui:x" value="749"/>
+        <param name="gui:y" value="63"/>
+    </component>
+    <component name="Query">
+        <param name="gui:x" value="1047"/>
+        <param name="gui:y" value="-80"/>
+    </component>
+    <component name="Split">
+        <param name="gui:x" value="-166"/>
+        <param name="gui:y" value="91"/>
+    </component>
+    <component name="Split2">
+        <param name="gui:x" value="-454"/>
+        <param name="gui:y" value="42"/>
+    </component>
+    <component name="Split3">
+        <param name="gui:x" value="132"/>
+        <param name="gui:y" value="86"/>
+    </component>
+    <component name="Union">
+        <param name="gui:x" value="610"/>
+        <param name="gui:y" value="-80"/>
+        <param name="gui:bends:1" value="410,-77;414,-60"/>
+        <param name="gui:bends:2" value="402,106;438,-40"/>
+    </component>
+    <component name="Union2">
+        <param name="gui:x" value="342"/>
+        <param name="gui:y" value="197"/>
+        <param name="gui:bends:1" value="333,198;336,215"/>
+        <param name="gui:bends:2" value="214,126;264,333;323,333;336,234"/>
+    </component>
+    <component name="ruleCheck">
+        <param name="gui:x" value="585"/>
+        <param name="gui:y" value="63"/>
+        <param name="gui:bends:1" value="237,214;267,93"/>
+    </component>
+    <component name="DataStreamOut">
+        <param name="gui:x" value="-333"/>
+        <param name="gui:y" value="-7"/>
+        <param name="gui:bends:1" value="-369,62;-361,23"/>
+    </component>
+    <component name="OutputStream">
+        <param name="gui:x" value="585"/>
+        <param name="gui:y" value="204"/>
+        <param name="gui:bends:1" value="557,215;561,231"/>
+    </component>
+    <component name="Setting">
+        <param name="gui:x" value="1127"/>
+        <param name="gui:y" value="-80"/>
+    </component>
+    <component name="TrendCounter">
+        <param name="gui:x" value="35"/>
+        <param name="gui:y" value="-12"/>
+    </component>
+    <component name="Group">
+        <param name="gui:x" value="253"/>
+        <param name="gui:y" value="18"/>
+        <param name="gui:width" value="774"/>
+        <param name="gui:height" value="392"/>
+    </component>
+    <gui.group name="Group" visual-state="open">
+        <member name="Filter2"/>
+        <member name="ruleCheck"/>
+        <member name="OutputStream"/>
+        <member name="abnormalCheck"/>
+        <member name="FirstStart"/>
+        <member name="Union2"/>
+        <member name="abnormalCountRef1"/>
+        <member name="ModuleTable"/>
+        <member name="Map5"/>
+        <param name="gui:x" value="253"/>
+        <param name="gui:y" value="18"/>
+        <param name="gui:width" value="774"/>
+        <param name="gui:height" value="392"/>
+    </gui.group>
+</application-layout>

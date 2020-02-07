@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.3_a45545bc0fa864b6dd457e084eb653f6e2004e05">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.iisigroup.product.iip.capabilitylist.AbnormalCount"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <parameter-definitions>
+            <parameter default="1" name="countThreshold"/>
+            <parameter default="192.168.61.19:9092" name="Broker"/>
+            <parameter default="192.168.61.19:2181" name="Zookeeper"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <data name="JDBCTable" type="jdbctable">
+            <param name="connection" value="IIP"/>
+        </data>
+        <data name="SrcDefine" shared="false" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <table-schema>
+                <schema>
+                    <field name="uuid" type="string"/>
+                    <field name="SrcID" type="string"/>
+                    <field name="SnsrID" type="string"/>
+                    <field name="GroupName" type="string"/>
+                    <field name="Layer1" type="string"/>
+                    <field name="Layer2" type="string"/>
+                    <field name="Layer3" type="string"/>
+                    <field name="Layer4" type="string"/>
+                    <field name="Layer5" type="string"/>
+                    <field name="Layer6" type="string"/>
+                    <field name="Layer7" type="string"/>
+                    <field name="Layer8" type="string"/>
+                    <field name="Layer9" type="string"/>
+                    <field name="Layer10" type="string"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="uuid"/>
+                </primary-index>
+            </table-schema>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <data name="SrcGroup" shared="false" source="concrete" type="querytable">
+            <param name="storage-method" value="heap"/>
+            <param name="replicated" value="false"/>
+            <table-schema>
+                <schema>
+                    <field name="uuid" type="string"/>
+                    <field name="GroupName" type="string"/>
+                    <field name="Layer1" type="string"/>
+                    <field name="Layer2" type="string"/>
+                    <field name="Layer3" type="string"/>
+                    <field name="Layer4" type="string"/>
+                    <field name="Layer5" type="string"/>
+                    <field name="Layer6" type="string"/>
+                    <field name="Layer7" type="string"/>
+                    <field name="Layer8" type="string"/>
+                    <field name="Layer9" type="string"/>
+                    <field name="Layer10" type="string"/>
+                </schema>
+                <primary-index type="btree">
+                    <field name="GroupName"/>
+                </primary-index>
+            </table-schema>
+            <param name="truncate" value="false"/>
+            <preload format="csv" mode="empty"/>
+        </data>
+        <stream name="dataIn">
+            <schema>
+                <field name="UUID" type="string"/>
+                <field name="SrcID" type="string"/>
+                <field name="SnsrType" type="string"/>
+                <field name="SnsrID" type="string"/>
+                <field name="CapType" type="string"/>
+                <field name="Rule" type="string"/>
+                <field name="MsgType" type="string"/>
+                <field name="Interval" type="int"/>
+                <field name="FEXGroupID" type="string"/>
+                <field name="Describe" type="string"/>
+                <field name="Enable" type="string"/>
+                <field name="abnormalData" type="capture" type-name="abnormalFieldType"/>
+            </schema>
+        </stream>
+        <stream name="ReloadConfigIn">
+            <schema/>
+        </stream>
+        <box name="InputAdapter" type="inputadapter">
+            <output port="1" stream="out:InputAdapter_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.once.Once"/>
+        </box>
+        <box name="Map2" type="map">
+            <input port="1" stream="dataIn"/>
+            <output port="1" stream="out:Map2_1"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <remove field="abnormalData"/>
+                    <replace field="SnsrID">if(SnsrID="" or isnull(SnsrID)) then "*" else SnsrID</replace>
+                </item>
+                <expressions>
+                    <include field="data">tuple(abnormalData)</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Union" type="union">
+            <input port="1" stream="out:InputAdapter_1"/>
+            <input port="2" stream="ReloadConfigIn"/>
+            <output port="1" stream="out:Union_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <box name="Query5" type="query">
+            <input port="1" stream="out:Map2_1"/>
+            <output port="1" stream="out:Query5_1"/>
+            <dataref id="querytable" name="SrcDefine"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="expression"/>
+            <param name="limit" value="1"/>
+            <param name="where-expression" value="current.SrcID=input1.SrcID and current.SnsrID=input1.SnsrID"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-explicit"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="all">
+                    <remove field="SnsrID"/>
+                    <remove field="SrcID"/>
+                    <remove field="uuid"/>
+                </item>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="GroupName">"Unknown"</set>
+                    <set field="Layer1">"Unknown"</set>
+                    <set field="Layer2">""</set>
+                    <set field="Layer3">""</set>
+                    <set field="Layer4">""</set>
+                    <set field="Layer5">""</set>
+                    <set field="Layer6">""</set>
+                    <set field="Layer7">""</set>
+                    <set field="Layer8">""</set>
+                    <set field="Layer9">""</set>
+                    <set field="Layer10">""</set>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Split" type="split">
+            <input port="1" stream="out:Union_1"/>
+            <output port="1" stream="out:Split_1"/>
+            <output port="2" stream="out:Split_2"/>
+            <param name="output-count" value="2"/>
+        </box>
+        <box name="Query" type="query">
+            <input port="1" stream="out:Split_1"/>
+            <output port="1" stream="out:Query_1"/>
+            <dataref id="jdbctable" name="JDBCTable"/>
+            <param name="sql" value="select * from SOA_SRC_GROUP"/>
+            <param name="use-callable-statements" value="false"/>
+            <param name="send-null-tuple" value="false"/>
+            <param name="jdbc-output-column" value="0"/>
+            <target-list>
+                <item name="table" selection="all"/>
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="result-set" value="query"/>
+        </box>
+        <box name="Query2" type="query">
+            <input port="1" stream="out:Split_2"/>
+            <output port="1" stream="out:Query2_1"/>
+            <dataref id="jdbctable" name="JDBCTable"/>
+            <param name="sql" value="select * from SOA_SRC_DEFINE"/>
+            <param name="use-callable-statements" value="false"/>
+            <param name="send-null-tuple" value="false"/>
+            <param name="jdbc-output-column" value="0"/>
+            <target-list>
+                <item name="table" selection="all"/>
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="result-set" value="query"/>
+        </box>
+        <box name="Query6" type="query">
+            <input port="1" stream="out:Query5_1"/>
+            <output port="1" stream="out:Query6_1"/>
+            <dataref id="querytable" name="SrcGroup"/>
+            <param name="operation" value="read"/>
+            <param name="where" value="expression"/>
+            <param name="where-expression" value="current.GroupName=input1.GroupName"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="ignore"/>
+            <param name="no-match-mode" value="output-no-match-explicit"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <item name="current" selection="all" suffix="_Group">
+                    <remove field="GroupName"/>
+                </item>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+                <expressions>
+                    <set field="Layer1">"Unknown"</set>
+                    <set field="Layer2">""</set>
+                    <set field="Layer3">""</set>
+                    <set field="Layer4">""</set>
+                    <set field="Layer5">""</set>
+                    <set field="Layer6">""</set>
+                    <set field="Layer7">""</set>
+                    <set field="Layer8">""</set>
+                    <set field="Layer9">""</set>
+                    <set field="Layer10">""</set>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Map6" type="map">
+            <input port="1" stream="out:Query6_1"/>
+            <output port="1" stream="out:Map6_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="DefineList">list(Layer1,Layer2,Layer3,Layer4,Layer5,Layer6,Layer7,Layer8,Layer9,Layer10)</include>
+                    <include field="GroupList">list(Layer1_Group,Layer2_Group,Layer3_Group,Layer4_Group,Layer5_Group,Layer6_Group,Layer7_Group,Layer8_Group,Layer9_Group,Layer10_Group)</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Query3" type="query">
+            <input port="1" stream="out:Query_1"/>
+            <dataref id="querytable" name="SrcGroup"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="GroupName"/>
+            <param name="key-value.0" value="GroupName"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="force"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="Query4" type="query">
+            <input port="1" stream="out:Query2_1"/>
+            <dataref id="querytable" name="SrcDefine"/>
+            <param name="operation" value="write"/>
+            <param name="where" value="primary-key"/>
+            <param name="key-field.0" value="uuid"/>
+            <param name="key-value.0" value="uuid"/>
+            <param name="write-type" value="insert"/>
+            <param name="if-write-fails" value="force"/>
+            <param name="no-match-mode" value="output-no-match-null"/>
+            <param name="order-by-direction" value="none"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
+            </target-list>
+            <target-list name="insert">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="update">
+                <item name="input" selection="all"/>
+            </target-list>
+            <target-list name="no-match">
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="Map7" type="map">
+            <input port="1" stream="out:Map6_1"/>
+            <output port="1" stream="out:Map7_1"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <remove field="DefineList"/>
+                    <remove field="GroupList"/>
+                </item>
+                <expressions>
+                    <include field="Layer">calljava("com.iisigroup.iip.dataprocess_template.LayerCombine","combineSrc",GroupList,DefineList)</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Aggregate" type="aggregate">
+            <input port="1" stream="out:Map7_1"/>
+            <output port="1" stream="out:Aggregate_1"/>
+            <param name="dimension-name.0" value="Dimension1"/>
+            <param name="dimension-type.0" value="Tuple"/>
+            <param name="dimension-partial.0" value="no"/>
+            <param name="dimension-size.0" value="${countThreshold}"/>
+            <param name="dimension-emit-close-first.0" value="false"/>
+            <param name="output-group-by" value="true"/>
+            <target-list>
+                <expressions>
+                    <include field="abnormalDataList">aggregatelist(data)</include>
+                </expressions>
+            </target-list>
+            <param name="group-by-name.0" value="UUID"/>
+            <param name="group-by.0" value="UUID"/>
+            <param name="group-by-name.1" value="SrcID"/>
+            <param name="group-by.1" value="SrcID"/>
+            <param name="group-by-name.2" value="SnsrType"/>
+            <param name="group-by.2" value="SnsrType"/>
+            <param name="group-by-name.3" value="SnsrID"/>
+            <param name="group-by.3" value="SnsrID"/>
+            <param name="group-by-name.4" value="CapType"/>
+            <param name="group-by.4" value="CapType"/>
+            <param name="group-by-name.5" value="Rule"/>
+            <param name="group-by.5" value="Rule"/>
+            <param name="group-by-name.6" value="MsgType"/>
+            <param name="group-by.6" value="MsgType"/>
+            <param name="group-by-name.7" value="Interval"/>
+            <param name="group-by.7" value="Interval"/>
+            <param name="group-by-name.8" value="FEXGroupID"/>
+            <param name="group-by.8" value="FEXGroupID"/>
+            <param name="group-by-name.9" value="Describe"/>
+            <param name="group-by.9" value="Describe"/>
+            <param name="group-by-name.10" value="Layer"/>
+            <param name="group-by.10" value="Layer"/>
+        </box>
+        <box name="Map3" type="map">
+            <input port="1" stream="out:Aggregate_1"/>
+            <output port="1" stream="out:Map3_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="Rule_ID">UUID</include>
+                    <include field="MsgContent">tuple(md5(SrcID+SnsrID+CapType+Rule) as Hash,&#13;
+tuple(UUID,SrcID,SnsrID,Layer,Rule,Describe,abnormalDataList) as Msg,)</include>
+                    <include field="Interval">Interval</include>
+                    <include field="FEXGroupID">FEXGroupID</include>
+                    <include field="ChnlType">MsgType</include>
+                    <include field="timeStamp">now()</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Java" type="java">
+            <input port="1" stream="out:Map3_1"/>
+            <output port="1" stream="out:Java_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.operator.jsontuple.Tuple2JSON"/>
+            <param name="EnableStatusPort" value="false"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="includeNullFields" value="true"/>
+            <param name="logLevel" value="INFO"/>
+            <param name="outputFieldName" value="message"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="tupleField" value=""/>
+        </box>
+        <box name="Map" type="map">
+            <input port="1" stream="out:Java_1"/>
+            <output port="1" stream="out:Map_1"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="message"/>
+                </item>
+                <expressions>
+                    <include field="topic">"IIP.Notification.AbnormalData"</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Split3" type="split">
+            <input port="1" stream="out:Map_1"/>
+            <output port="1" stream="OutputStream"/>
+            <output port="2" stream="out:Split3_2"/>
+            <param name="output-count" value="2"/>
+        </box>
+        <output-stream name="OutputStream"/>
+        <box name="OutputAdapter" type="outputadapter">
+            <input port="1" stream="out:Split3_2"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.kafka.KafkaProducer"/>
+            <param name="EnableMetricsPort" value="false"/>
+            <param name="EnableStatusPort" value="false"/>
+            <param name="brokers" value="${Broker}"/>
+            <param name="closeOnException" value="false"/>
+            <param name="compressionType" value="None"/>
+            <param name="connectOnStartup" value="true"/>
+            <param name="enableCommandPort" value="false"/>
+            <param name="enablePassThroughFields" value="false"/>
+            <param name="keySerializeType" value="Custom"/>
+            <param name="logLevel" value="INFO"/>
+            <param name="serializeType" value="Custom"/>
+            <param name="synchronousSend" value="false"/>
+            <param name="userKeySerializerClass" value=""/>
+            <param name="userSerializerClass" value=""/>
+        </box>
+    </add>
+</modify>

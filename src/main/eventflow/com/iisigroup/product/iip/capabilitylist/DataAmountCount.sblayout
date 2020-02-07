@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="DataIn">
+        <param name="gui:x" value="-684"/>
+        <param name="gui:y" value="-4"/>
+    </component>
+    <component name="ReloadCapCom">
+        <param name="gui:x" value="-321"/>
+        <param name="gui:y" value="242"/>
+    </component>
+    <component name="abnormalCheck">
+        <param name="gui:x" value="-69"/>
+        <param name="gui:y" value="201"/>
+    </component>
+    <component name="abnormalCountRef1">
+        <param name="gui:x" value="308"/>
+        <param name="gui:y" value="67"/>
+    </component>
+    <component name="ModuleTable">
+        <param name="gui:x" value="-79"/>
+        <param name="gui:y" value="334"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="Filter">
+        <param name="gui:x" value="-604"/>
+        <param name="gui:y" value="-4"/>
+    </component>
+    <component name="Filter2">
+        <param name="gui:x" value="165"/>
+        <param name="gui:y" value="67"/>
+    </component>
+    <component name="FirstStart">
+        <param name="gui:x" value="-321"/>
+        <param name="gui:y" value="144"/>
+    </component>
+    <component name="Split">
+        <param name="gui:x" value="-444"/>
+        <param name="gui:y" value="-4"/>
+    </component>
+    <component name="Union2">
+        <param name="gui:x" value="-192"/>
+        <param name="gui:y" value="201"/>
+        <param name="gui:bends:1" value="-229,174;-219,220"/>
+        <param name="gui:bends:2" value="-214,270;-208,240"/>
+    </component>
+    <component name="ruleCheck">
+        <param name="gui:x" value="81"/>
+        <param name="gui:y" value="67"/>
+        <param name="gui:bends:1" value="-109,36;-95,98"/>
+    </component>
+    <component name="timeAgg">
+        <param name="gui:x" value="-524"/>
+        <param name="gui:y" value="-4"/>
+    </component>
+    <component name="CountOuT">
+        <param name="gui:x" value="18"/>
+        <param name="gui:y" value="-76"/>
+        <param name="gui:bends:1" value="-122,16;-108,-46"/>
+    </component>
+    <component name="OutputStream">
+        <param name="gui:x" value="81"/>
+        <param name="gui:y" value="201"/>
+    </component>
+    <component name="Group">
+        <param name="gui:x" value="-348"/>
+        <param name="gui:y" value="22"/>
+        <param name="gui:width" value="790"/>
+        <param name="gui:height" value="392"/>
+    </component>
+    <gui.group name="Group" visual-state="open">
+        <member name="Filter2"/>
+        <member name="ruleCheck"/>
+        <member name="OutputStream"/>
+        <member name="abnormalCheck"/>
+        <member name="FirstStart"/>
+        <member name="Union2"/>
+        <member name="ReloadCapCom"/>
+        <member name="abnormalCountRef1"/>
+        <member name="ModuleTable"/>
+        <param name="gui:x" value="-348"/>
+        <param name="gui:y" value="22"/>
+        <param name="gui:width" value="790"/>
+        <param name="gui:height" value="392"/>
+    </gui.group>
+</application-layout>

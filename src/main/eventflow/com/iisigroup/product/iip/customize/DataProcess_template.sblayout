@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="ProcessedBufferHandle">
+        <param name="gui:x" value="262"/>
+        <param name="gui:y" value="64"/>
+        <param name="gui:bends:1" value="-40,111;-36,94"/>
+    </component>
+    <component name="ReloadCommandIn">
+        <param name="gui:x" value="-663"/>
+        <param name="gui:y" value="-114"/>
+        <param name="gui:height" value="228"/>
+    </component>
+    <component name="capabilityLog">
+        <param name="gui:x" value="362"/>
+        <param name="gui:y" value="207"/>
+        <param name="gui:bends:1" value="345,253;348,236"/>
+    </component>
+    <component name="capability_exampleRef1">
+        <param name="gui:x" value="103"/>
+        <param name="gui:y" value="302"/>
+        <param name="gui:bends:1" value="-49,121;-1,319"/>
+        <param name="gui:bends:2" value="35,356;39,339"/>
+    </component>
+    <component name="queueConsumerLog">
+        <param name="gui:x" value="-235"/>
+        <param name="gui:y" value="234"/>
+        <param name="gui:bends:1" value="-274,280;-270,263"/>
+    </component>
+    <component name="queueConsumer_templateRef1">
+        <param name="gui:x" value="-524"/>
+        <param name="gui:y" value="329"/>
+        <param name="gui:bends:1" value="-350,149;-322,265"/>
+    </component>
+    <component name="toDataStorage2">
+        <param name="gui:x" value="724"/>
+        <param name="gui:y" value="180"/>
+        <param name="gui:bends:1" value="671,298;691,210"/>
+    </component>
+    <component name="toDataStorageCopy">
+        <param name="gui:x" value="839"/>
+        <param name="gui:y" value="376"/>
+    </component>
+    <component name="JDBCTable">
+        <param name="gui:x" value="591"/>
+        <param name="gui:y" value="78"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="Filter2">
+        <param name="gui:x" value="724"/>
+        <param name="gui:y" value="376"/>
+        <param name="gui:bends:1" value="694,318;714,406"/>
+    </component>
+    <component name="FilterCopy">
+        <param name="gui:x" value="-346"/>
+        <param name="gui:y" value="261"/>
+        <param name="gui:height" value="197"/>
+    </component>
+    <component name="FilterCopy2">
+        <param name="gui:x" value="276"/>
+        <param name="gui:y" value="234"/>
+        <param name="gui:height" value="197"/>
+    </component>
+    <component name="Map">
+        <param name="gui:x" value="724"/>
+        <param name="gui:y" value="-55"/>
+    </component>
+    <component name="OutputAdapter">
+        <param name="gui:x" value="262"/>
+        <param name="gui:y" value="-55"/>
+        <param name="gui:bends:1" value="22,101;52,-25"/>
+    </component>
+    <component name="Query">
+        <param name="gui:x" value="601"/>
+        <param name="gui:y" value="-55"/>
+    </component>
+    <component name="Split">
+        <param name="gui:x" value="-351"/>
+        <param name="gui:y" value="81"/>
+        <param name="gui:bends:1" value="-523,94;-519,111"/>
+    </component>
+    <component name="Split2">
+        <param name="gui:x" value="601"/>
+        <param name="gui:y" value="278"/>
+        <param name="gui:bends:1" value="555,329;559,308"/>
+    </component>
+    <component name="UnionCopy">
+        <param name="gui:x" value="-110"/>
+        <param name="gui:y" value="261"/>
+        <param name="gui:height" value="197"/>
+        <param name="gui:bends:1" value="-144,263;-140,280"/>
+    </component>
+    <component name="UnionCopy2">
+        <param name="gui:x" value="483"/>
+        <param name="gui:y" value="234"/>
+        <param name="gui:height" value="197"/>
+        <param name="gui:bends:1" value="439,236;443,253"/>
+    </component>
+    <component name="FlagConfig">
+        <param name="gui:x" value="-351"/>
+        <param name="gui:y" value="-107"/>
+        <param name="gui:bends:1" value="-536,-94;-532,-77"/>
+    </component>
+    <component name="PredictModelSwitch">
+        <param name="gui:x" value="839"/>
+        <param name="gui:y" value="-55"/>
+    </component>
+    <component name="toLiveView">
+        <param name="gui:x" value="724"/>
+        <param name="gui:y" value="278"/>
+    </component>
+    <component name="capabilityPart">
+        <param name="gui:x" value="25"/>
+        <param name="gui:y" value="161"/>
+        <param name="gui:width" value="532"/>
+        <param name="gui:height" value="293"/>
+    </component>
+    <component name="queueConsumerPart">
+        <param name="gui:x" value="-604"/>
+        <param name="gui:y" value="188"/>
+        <param name="gui:width" value="564"/>
+        <param name="gui:height" value="293"/>
+    </component>
+    <gui.group name="capabilityPart" visual-state="open">
+        <member name="FilterCopy2"/>
+        <member name="UnionCopy2"/>
+        <member name="capabilityLog"/>
+        <member name="capability_exampleRef1"/>
+        <param name="gui:x" value="25"/>
+        <param name="gui:y" value="161"/>
+        <param name="gui:width" value="532"/>
+        <param name="gui:height" value="293"/>
+    </gui.group>
+    <gui.group name="queueConsumerPart" visual-state="open">
+        <member name="queueConsumer_templateRef1"/>
+        <member name="queueConsumerLog"/>
+        <member name="UnionCopy"/>
+        <member name="FilterCopy"/>
+        <param name="gui:x" value="-604"/>
+        <param name="gui:y" value="188"/>
+        <param name="gui:width" value="564"/>
+        <param name="gui:height" value="293"/>
+    </gui.group>
+</application-layout>
