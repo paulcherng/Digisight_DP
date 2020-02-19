@@ -127,7 +127,7 @@
         </box>
         <module-reference name="capability_exampleRef1">
             <input name="configIn" port="1" stream="out:Split_3"/>
-            <input name="ValidatedDataIn" port="2" stream="out:UnionCopy_1"/>
+            <input name="CapabilityInput" port="2" stream="out:UnionCopy_1"/>
             <output name="ProcessedDataOut" port="1" stream="out:capability_exampleRef1_1"/>
             <param name="file" value="com.iisigroup.product.iip.customize.Capability_example"/>
             <parameter-bindings>

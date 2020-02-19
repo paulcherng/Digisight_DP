@@ -9,8 +9,8 @@
             <param name="fully-qualified-name" value="com.iisigroup.product.iip.customize.ProcessedBufferHandle"/>
         </type-metadata>
         <memory-model-settings/>
-        <implements module-reference="com.iisigroup.product.iip.customize.SchemaControl"/>
-        <import from="com.iisigroup.product.iip.customize.SchemaControl"/>
+        <implements module-reference="com.iisigroup.iip.schemacontrol.SchemaControl"/>
+        <import from="com.iisigroup.iip.schemacontrol.SchemaControl"/>
         <parameter-definitions>
             <parameter default="SrcID" name="SrcID"/>
             <parameter name="SnsrType"/>
@@ -21,10 +21,12 @@
         </parameter-definitions>
         <dynamic-variables>
             <dynamic-variable initial-expression="&quot;yyyyMMdd&quot;" name="DateFormat" setter-expression="input.dateFormat" setter-stream="DateFormatConfig"/>
+            <dynamic-variable initial-expression="&quot;02&quot;" name="PurgeHour" setter-expression="input.PurgeHour" setter-stream="PurgeHourConfig"/>
+            <dynamic-variable initial-expression="&quot;0&quot;" name="PurgeMinute" setter-expression="input.PurgeMinute" setter-stream="PurgeMinuteConfig"/>
             <dynamic-variable initial-expression="&quot;C:/DigiSight&quot;" name="RootPath" setter-expression="input.RootPath" setter-stream="RootPathConfig"/>
         </dynamic-variables>
         <data name="JDBCTable" type="jdbctable">
-            <param name="connection" value="POCdata"/>
+            <param name="connection" value="IIP"/>
         </data>
         <data name="JDBCTable2" type="jdbctable">
             <param name="connection" value="IIP"/>
@@ -49,7 +51,7 @@
             <input port="1" stream="out:Metronome_1"/>
             <output port="1" stream="out:Filter2_1"/>
             <param name="autogen-nomatch-port" value="false"/>
-            <param name="expression.0" value="format_time(time,DateFormat)"/>
+            <param name="expression.0" value="format_time(time,&quot;mmss&quot;)==PurgeHour+PurgeMinute"/>
         </box>
         <box name="Split2" type="split">
             <input port="1" stream="out:Start_1"/>
@@ -135,9 +137,13 @@
             <input port="1" stream="out:Query2_1"/>
             <output port="1" stream="out:Filter_1"/>
             <output port="2" stream="out:Filter_2"/>
+            <output port="3" stream="out:Filter_3"/>
+            <output port="4" stream="out:Filter_4"/>
             <param name="autogen-nomatch-port" value="false"/>
             <param name="expression.0" value="KEE='dateFormat'"/>
             <param name="expression.1" value="KEE='RootPath'"/>
+            <param name="expression.2" value="KEE='action.hour-schedule-up'"/>
+            <param name="expression.3" value="KEE='action.minute-schedule-up'"/>
         </box>
         <box name="Java" type="java">
             <input port="1" stream="out:KafkaConsume_1"/>
@@ -149,9 +155,29 @@
             <param name="enableStatusPort" value="false"/>
             <param name="jsonFieldName" value="message"/>
             <param name="logLevel" value="INFO"/>
-            <param name="outputSchema" value="processedData"/>
+            <param name="outputSchema" value="CapabilityOut"/>
             <param name="passThroughFieldsFieldName" value="PassThroughFields"/>
             <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+        </box>
+        <box name="Map" type="map">
+            <input port="1" stream="out:Filter_3"/>
+            <output port="1" stream="PurgeHourConfig"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="PurgeHour">VALUE</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Map3" type="map">
+            <input port="1" stream="out:Filter_4"/>
+            <output port="1" stream="PurgeMinuteConfig"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="PurgeMinute">VALUE</include>
+                </expressions>
+            </target-list>
         </box>
         <box name="Map4Copy" type="map">
             <input port="1" stream="out:Filter_1"/>
@@ -181,6 +207,8 @@
             <param name="output-count" value="3"/>
         </box>
         <output-stream name="DateFormatConfig"/>
+        <output-stream name="PurgeHourConfig"/>
+        <output-stream name="PurgeMinuteConfig"/>
         <output-stream name="RootPathConfig"/>
         <box name="Map2" type="map">
             <input port="1" stream="out:Split_2"/>
@@ -192,11 +220,11 @@
                 </expressions>
             </target-list>
         </box>
-        <box disabled="true" name="Query" type="query">
+        <box name="Query" type="query">
             <input port="1" stream="out:Split_1"/>
             <output port="1" stream="out:Query_1"/>
             <dataref id="jdbctable" name="JDBCTable"/>
-            <param name="sql" value="insert into ()&#13;&#10;values()"/>
+            <param name="sql" value="insert into ${TableName}&#13;&#10;(ColumnName)&#13;&#10;values(Data)"/>
             <param name="use-callable-statements" value="false"/>
             <param name="send-null-tuple" value="false"/>
             <param name="jdbc-output-column" value="0"/>

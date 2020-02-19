@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application version="10.4.3_a45545bc0fa864b6dd457e084eb653f6e2004e05">
+    <annotations>
+        <annotation name="hygienic"/>
+    </annotations>
+    <type-metadata>
+        <param name="type" value="interface"/>
+        <param name="fully-qualified-name" value="com.iisigroup.product.iip.customize.CapabilityInt"/>
+    </type-metadata>
+    <memory-model-settings/>
+    <implements module-reference="com.iisigroup.iip.schemacontrol.SchemaControl"/>
+    <import from="com.iisigroup.iip.schemacontrol.SchemaControl"/>
+    <dynamic-variables/>
+    <stream name="CapabilityInput" schema="CVSOut"/>
+    <output-stream name="CapabilityOutput" schema="CapabilityOut"/>
+</application>

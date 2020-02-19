@@ -9,13 +9,13 @@
             <param name="fully-qualified-name" value="com.iisigroup.product.iip.capabilitylist.RuleTrigger"/>
         </type-metadata>
         <memory-model-settings/>
-        <implements module-reference="com.iisigroup.product.iip.customize.SchemaControl"/>
-        <import from="com.iisigroup.product.iip.customize.SchemaControl"/>
+        <implements module-reference="com.iisigroup.iip.schemacontrol.SchemaControl"/>
+        <import from="com.iisigroup.iip.schemacontrol.SchemaControl"/>
         <dynamic-variables/>
         <stream name="DataIn">
             <schema/>
         </stream>
-        <box action-schema="processedData" name="DecisionTable2" type="decision-table">
+        <box action-schema="CapabilityOut" name="DecisionTable2" type="decision-table">
             <input port="1" stream="DataIn"/>
             <output port="1" stream="out:DecisionTable2_1"/>
             <param name="load-from-ams" value="false"/>

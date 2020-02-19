@@ -9,8 +9,8 @@
             <param name="fully-qualified-name" value="com.iisigroup.product.iip.customize.Subscriber_template"/>
         </type-metadata>
         <memory-model-settings/>
-        <implements module-reference="com.iisigroup.product.iip.customize.SchemaControl"/>
-        <import from="com.iisigroup.product.iip.customize.SchemaControl"/>
+        <implements module-reference="com.iisigroup.iip.schemacontrol.SchemaControl"/>
+        <import from="com.iisigroup.iip.schemacontrol.SchemaControl"/>
         <parameter-definitions>
             <parameter default="SrcID" name="SrcID"/>
             <parameter name="SnsrType"/>
@@ -73,10 +73,10 @@
             <param name="enableStatusPort" value="false"/>
             <param name="jsonFieldName" value="message"/>
             <param name="logLevel" value="INFO"/>
-            <param name="outputSchema" value="validatedData"/>
+            <param name="outputSchema" value="CVSOut"/>
             <param name="passThroughFieldsFieldName" value="PassThroughFields"/>
             <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
         </box>
-        <output-stream name="listOut" schema="validatedData"/>
+        <output-stream name="listOut" schema="CVSOut"/>
     </add>
 </modify>
