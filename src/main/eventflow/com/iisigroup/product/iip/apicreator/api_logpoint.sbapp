@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.3_a45545bc0fa864b6dd457e084eb653f6e2004e05">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="com.iisigroup.product.iip.apicreator.api_logpoint"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <parameter-definitions>
+            <parameter name="LogPoint"/>
+            <parameter name="Name"/>
+            <parameter default="192.168.61.14:9092" name="Broker"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <stream name="InputStream">
+            <schema>
+                <field name="SB_ResponseId" type="string"/>
+                <field name="Input" type="capture" type-name="capturedField"/>
+            </schema>
+        </stream>
+        <box name="Map" type="map">
+            <input port="1" stream="InputStream"/>
+            <output port="1" stream="out:Map_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="Name">"${Name}"</include>
+                    <include field="LogPoint">"${LogPoint}"</include>
+                    <include field="RcvTime">now()</include>
+                    <include field="InputData">Input</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Map2" type="map">
+            <input port="1" stream="out:Map_1"/>
+            <output port="1" stream="out:Map2_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="Data">new_tuple(input)</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Java" type="java">
+            <input port="1" stream="out:Map2_1"/>
+            <output port="1" stream="out:Java_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.operator.jsontuple.Tuple2JSON"/>
+            <param name="EnableStatusPort" value="false"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="includeNullFields" value="false"/>
+            <param name="logLevel" value="INFO"/>
+            <param name="outputFieldName" value="message"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="tupleField" value="Data"/>
+        </box>
+        <box name="Map3" type="map">
+            <input port="1" stream="out:Java_1"/>
+            <output port="1" stream="out:Map3_1"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <remove field="Data"/>
+                </item>
+                <expressions>
+                    <include field="topic">"extAPI_Log"</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="OutputAdapter" type="outputadapter">
+            <input port="1" stream="out:Map3_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.kafka.KafkaProducer"/>
+            <param name="EnableMetricsPort" value="false"/>
+            <param name="EnableStatusPort" value="false"/>
+            <param name="brokers" value="${Broker}"/>
+            <param name="closeOnException" value="false"/>
+            <param name="compressionType" value="None"/>
+            <param name="connectOnStartup" value="true"/>
+            <param name="enableCommandPort" value="false"/>
+            <param name="enablePassThroughFields" value="false"/>
+            <param name="keySerializeType" value="Custom"/>
+            <param name="logLevel" value="INFO"/>
+            <param name="serializeType" value="Custom"/>
+            <param name="synchronousSend" value="false"/>
+            <param name="userKeySerializerClass" value=""/>
+            <param name="userSerializerClass" value=""/>
+        </box>
+    </add>
+</modify>

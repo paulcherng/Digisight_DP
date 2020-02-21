@@ -132,6 +132,8 @@
                     <remove field="SrcID"/>
                     <remove field="uuid"/>
                 </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="all"/>
@@ -206,6 +208,8 @@
                 <item name="current" selection="all" suffix="_Group">
                     <remove field="GroupName"/>
                 </item>
+                <item name="old" selection="none"/>
+                <item name="new" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="all"/>
@@ -255,6 +259,7 @@
                 <item name="input" selection="none"/>
                 <item name="old" selection="none"/>
                 <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="all"/>
@@ -281,6 +286,7 @@
                 <item name="input" selection="none"/>
                 <item name="old" selection="none"/>
                 <item name="new" selection="none"/>
+                <item name="current" selection="none"/>
             </target-list>
             <target-list name="insert">
                 <item name="input" selection="all"/>

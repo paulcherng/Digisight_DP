@@ -57,5 +57,11 @@
     		<artifactId>webserver</artifactId>
     		<version>10.4.3</version>
     	</dependency>
+    	<dependency>
+    		<groupId>com.iisigroup.iip</groupId>
+    		<artifactId>dataConnect_Template</artifactId>
+    		<version>0.0.1-SNAPSHOT</version>
+    		<type>ep-eventflow-fragment</type>
+    	</dependency>
     </dependencies>
 </project>

@@ -108,22 +108,6 @@
         <param name="gui:y" value="204"/>
         <param name="gui:bends:1" value="563,216;567,232"/>
     </component>
-    <component name="OutputStream2">
-        <param name="gui:x" value="78"/>
-        <param name="gui:y" value="274"/>
-    </component>
-    <component name="OutputStream3">
-        <param name="gui:x" value="211"/>
-        <param name="gui:y" value="306"/>
-    </component>
-    <component name="OutputStream4">
-        <param name="gui:x" value="848"/>
-        <param name="gui:y" value="-60"/>
-    </component>
-    <component name="OutputStream5">
-        <param name="gui:x" value="951"/>
-        <param name="gui:y" value="-57"/>
-    </component>
     <component name="Setting">
         <param name="gui:x" value="1133"/>
         <param name="gui:y" value="-80"/>
