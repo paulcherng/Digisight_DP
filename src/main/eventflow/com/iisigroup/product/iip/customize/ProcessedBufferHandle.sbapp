@@ -16,8 +16,9 @@
             <parameter name="SnsrType"/>
             <parameter default="192.168.61.14:9092" name="Broker"/>
             <parameter name="TableName"/>
-            <parameter name="PurgeFormat"/>
-            <parameter name="PurgeInterval"/>
+            <parameter default="hh" name="PurgeFormat"/>
+            <parameter default="72" name="PurgeInterval"/>
+            <parameter name="TimeField"/>
         </parameter-definitions>
         <dynamic-variables>
             <dynamic-variable initial-expression="&quot;yyyyMMdd&quot;" name="DateFormat" setter-expression="input.dateFormat" setter-stream="DateFormatConfig"/>
@@ -74,7 +75,7 @@
             <input port="1" stream="out:Filter2_1"/>
             <output port="1" stream="out:Query3_1"/>
             <dataref id="jdbctable" name="JDBCTable2"/>
-            <param name="sql" value="delete from ${TableName} where Datediff(${PurgeFormat},GPSTime,getDate())&gt;=${PurgeInterval}"/>
+            <param name="sql" value="delete from ${TableName} where Datediff(${PurgeFormat},${TimeField},getDate())&gt;=${PurgeInterval}"/>
             <param name="use-callable-statements" value="false"/>
             <param name="send-null-tuple" value="false"/>
             <param name="jdbc-output-column" value="0"/>

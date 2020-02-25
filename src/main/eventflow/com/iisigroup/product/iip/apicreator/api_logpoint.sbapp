@@ -28,9 +28,10 @@
                 <item name="input" selection="none"/>
                 <expressions>
                     <include field="Name">"${Name}"</include>
+                    <include field="SB_ResponseId">SB_ResponseId</include>
                     <include field="LogPoint">"${LogPoint}"</include>
                     <include field="RcvTime">now()</include>
-                    <include field="InputData">Input</include>
+                    <include field="DataContent">tuple(Input)</include>
                 </expressions>
             </target-list>
         </box>
